@@ -1,1 +1,1150 @@
-{"requiredFeatureNames":[],"dfm":{"dataReplicator":false,"crconnectionDependencies":[],"datagen-name":"Data Flow 1: Enrich Subject Area WB Copy","namespace":"gabrielle.prichard@oracle.com","definition":{"steps":[{"stepId":"InputDataset_0","description":"Sample Sales RBF","type":"InputDataset","stepDisplayName":"Sample Sales RBF","stepDescription":"","datasetId":"XSA('gabrielle.prichard@oracle.com'.'Sample Sales')","datasetRef":"ds_5","qualifiedTable":"XSA(ds_5)","datasetDescription":"","datasetType":"datamodel","datasetDisplayName":"Sample Sales RBF","inputType":"all","parameters":[],"promptForInputSource":[],"columns":[{"name":"\"Sample Sales\".\"Calendar Date\"","newName":"Calendar Date"},{"name":"\"Sample Sales\".\"Brand\"","newName":"Brand"},{"name":"\"Sample Sales\".\"Product\"","newName":"Product"},{"name":"\"Sample Sales\".\"Type\"","newName":"Type"},{"name":"\"Sample Sales\".\"Line of Business\"","newName":"Line of Business"},{"name":"\"Sample Sales\".\"Name\"","newName":"Name"},{"name":"\"Sample Sales\".\"Cust Key\"","newName":"Cust Key"},{"name":"\"Sample Sales\".\"Income Lvl\"","newName":"Income Lvl"},{"name":"\"Sample Sales\".\"Gender\"","newName":"Gender"},{"name":"\"Sample Sales\".\"Crdt Rate\"","newName":"Crdt Rate"},{"name":"\"Sample Sales\".\"Birth Dt\"","newName":"Birth Dt"},{"name":"\"Sample Sales\".\"Marital St\"","newName":"Marital St"},{"name":"\"Sample Sales\".\"Revenue\"","newName":"Revenue"},{"name":"\"Sample Sales\".\"Units\"","newName":"Units"},{"name":"\"Sample Sales\".\"Product Total Revenue\"","newName":"Product Total Revenue"},{"name":"\"Sample Sales\".\"Product Type Revenue\"","newName":"Product Type Revenue"},{"name":"\"Sample Sales\".\"Area\"","newName":"Area"},{"name":"\"Sample Sales\".\"City\"","newName":"City"},{"name":"\"Sample Sales\".\"Country Name\"","newName":"Country Name"},{"name":"\"Sample Sales\".\"Estab Name\"","newName":"Estab Name"},{"name":"\"Sample Sales\".\"Postal Code\"","newName":"Postal Code"},{"name":"\"Sample Sales\".\"Region\"","newName":"Region"},{"name":"\"Sample Sales\".\"State Province\"","newName":"State Province"}]},{"stepId":"InputDataset_1","description":"SFO-Geo","type":"InputDataset","stepDisplayName":"SFO-Geo","stepDescription":"","datasetId":"XSA('gabrielle.prichard@oracle.com'.'SFO-Geo')","datasetRef":"ds_1","qualifiedTable":"XSA(ds_1)","datasetDescription":"","datasetType":"datamodel","datasetDisplayName":"SFO-Geo","inputType":"all","parameters":[],"promptForInputSource":[],"columns":[{"name":"\"San_Francisco_ZIP_Codes_20240508\".\"﻿geometry\"","newName":"﻿geometry"},{"name":"\"San_Francisco_ZIP_Codes_20240508\".\"zip\"","newName":"zip"}]},{"stepId":"Join_0","description":"Join","type":"Join","stepDisplayName":"","stepDescription":"","joinType":"leftouterjoin","leftDataset":"RenameColumns_0","rightDataset":"Concatenate_0","joinOn":[{"id":"JoinOn_0","leftColumn":"Customer Postal Code","rightColumn":"zip","operator":"="}],"joinCondition":"and"},{"stepId":"OutputDataset_0","description":"Save Data","type":"OutputDataset","stepDisplayName":"DB Save","stepDescription":"","datasetRef":"ds_2","datasetName":"SampleSales-Enriched-NoGeo-DS","datasetDescription":"","outputType":"Create","parameters":[],"promptForOutputDataset":[],"customizedColumns":[{"colName":"Calendar Date","DBColName":"CALENDAR_DATE","aggrRule":"none","dataType":"timestamp"},{"colName":"Brand","DBColName":"BRAND","aggrRule":"none","dataType":"varchar"},{"colName":"Product","DBColName":"PRODUCT","aggrRule":"none","dataType":"varchar"},{"colName":"Type","DBColName":"TYPE","aggrRule":"none","dataType":"varchar"},{"colName":"Line of Business","DBColName":"LINE_OF_BUSINESS","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Name","DBColName":"CUSTOMER_NAME","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Key","DBColName":"CUSTOMER_KEY","aggrRule":"none","dataType":"numeric"},{"colName":"Customer Income Lvl","DBColName":"CUSTOMER_INCOME_LVL","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Gender","DBColName":"CUSTOMER_GENDER","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Credit Rate","DBColName":"CUSTOMER_CREDIT_RATE","aggrRule":"sum","dataType":"numeric"},{"colName":"Customer Birth Dt","DBColName":"CUSTOMER_BIRTH_DT","aggrRule":"none","dataType":"timestamp"},{"colName":"Customer Marital St","DBColName":"CUSTOMER_MARITAL_ST","aggrRule":"none","dataType":"varchar"},{"colName":"Revenue","DBColName":"REVENUE","aggrRule":"sum","dataType":"numeric"},{"colName":"Units","DBColName":"UNITS","aggrRule":"sum","dataType":"numeric"},{"colName":"Product Total Revenue","DBColName":"PRODUCT_TOTAL_REVENUE","aggrRule":"sum","dataType":"numeric"},{"colName":"Product Type Revenue","DBColName":"PRODUCT_TYPE_REVENUE","aggrRule":"sum","dataType":"numeric"},{"colName":"Customer Area","DBColName":"CUSTOMER_AREA","aggrRule":"none","dataType":"varchar"},{"colName":"Customer City","DBColName":"CUSTOMER_CITY","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Country Name","DBColName":"CUSTOMER_COUNTRY_NAME","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Estab Name","DBColName":"CUSTOMER_ESTAB_NAME","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Postal Code","DBColName":"CUSTOMER_POSTAL_CODE","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Region","DBColName":"CUSTOMER_REGION","aggrRule":"none","dataType":"varchar"},{"colName":"Customer State Province","DBColName":"CUSTOMER_STATE_PROVINCE","aggrRule":"none","dataType":"varchar"},{"colName":"zip","DBColName":"ZIP","aggrRule":"none","dataType":"varchar"},{"colName":"Prev Year","DBColName":"PREV_YEAR","aggrRule":"none","dataType":"integer"},{"colName":"Merged","DBColName":"MERGED","aggrRule":"none","dataType":"varchar"},{"colName":"FName","DBColName":"FNAME","aggrRule":"none","dataType":"varchar"},{"colName":"LName","DBColName":"LNAME","aggrRule":"none","dataType":"varchar"}],"saveType":"conn","connectionRef":"co_1","tableName":"SampleSales_Enriched_WB_NoGeo","connectionDisplayName":"adw-pm-gp-developer"},{"stepId":"AddColumns_1","description":"Add Columns","type":"AddColumns","stepDisplayName":"Variable","stepDescription":"","columns":[{"name":"Prev Year","expression":"year(TIMESTAMPADD(SQL_TSI_YEAR, -3, CURRENT_DATE))","datatype":"integer","aggrule":"sum","srcexpression":"year(TIMESTAMPADD(SQL_TSI_YEAR, -3, CURRENT_DATE))"}]},{"stepId":"Filter_0","description":"Filter","type":"Filter","stepDisplayName":"Prev Year","stepDescription":"","filter":[{"expression":"year(\"Calendar Date\") = \"Prev Year\"","srcexpression":"year(\"Calendar Date\") = \"Prev Year\"","type":"complexFilter"}],"filterControlCollections":{"name":"report","filterControls":{"children":[{"filterID":"c930adfb-77ef-4ff3-8e68-29d40355093e","type":"saw:expressionFilterControl","label":{"caption":{"text":"Expression Filter"}},"expr":{"children":[],"type":"sawx:sql","expression":"year(\"TableAlias\".\"Calendar Date\") = \"TableAlias\".\"Prev Year\""},"filterControlConfig":{"_version":"1.0.8","settings":{"filterModelClassName":"obitech-expressionfilter/expressionfiltertwopartformula.ExpressionFilterModelTwoPartFormula","location":"filter_bar"}},"address":2,"isTwoPartFormula":true}]}},"shouldUpgradeVersion":false},{"stepId":"RenameColumns_0","description":"Rename Columns","type":"RenameColumns","stepDisplayName":"","stepDescription":"","renamedColumns":[{"oldName":"Name","newName":"Customer Name"},{"oldName":"Cust Key","newName":"Customer Key"},{"oldName":"Area","newName":"Customer Area"},{"oldName":"City","newName":"Customer City"},{"oldName":"Country Name","newName":"Customer Country Name"},{"oldName":"Estab Name","newName":"Customer Estab Name"},{"oldName":"Income Lvl","newName":"Customer Income Lvl"},{"oldName":"Gender","newName":"Customer Gender"},{"oldName":"Birth Dt","newName":"Customer Birth Dt"},{"oldName":"Marital St","newName":"Customer Marital St"},{"oldName":"Postal Code","newName":"Customer Postal Code"},{"oldName":"Region","newName":"Customer Region"},{"oldName":"State Province","newName":"Customer State Province"},{"oldName":"Crdt Rate","newName":"Customer Credit Rate"}]},{"stepId":"Branch_0","description":"Branch","type":"Branch","stepDisplayName":"","stepDescription":""},{"stepId":"OutputDataset_1","description":"Save Data","type":"OutputDataset","stepDisplayName":"","stepDescription":"","datasetRef":"ds_6","datasetName":"SampleSales-Customers","datasetDescription":"","outputType":"Create","parameters":[],"promptForOutputDataset":[],"customizedColumns":[{"colName":"Customer Name","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Key","DBColName":"","aggrRule":"none","dataType":"numeric"},{"colName":"Customer Birth Dt","DBColName":"","aggrRule":"none","dataType":"timestamp"},{"colName":"Customer Income Lvl","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Credit Rate","DBColName":"","aggrRule":"sum","dataType":"numeric"},{"colName":"Customer Total Revenue","DBColName":"","aggrRule":"sum","dataType":"integer"},{"colName":"Customer Total Units Purchased","DBColName":"","aggrRule":"sum","dataType":"numeric"},{"colName":"Customer Income","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Age","DBColName":"","aggrRule":"sum","dataType":"integer"}],"saveType":"obi","connectionRef":"","tableName":"","connectionDisplayName":""},{"stepId":"GroupBy_0","description":"Aggregate","type":"GroupBy","stepDisplayName":"","stepDescription":"","groupByColumns":["Customer Name","Customer Key","Customer Birth Dt","Customer Income Lvl","Customer Credit Rate"],"aggrColumns":[{"newName":"Customer Total Revenue","aggrtype":"sum","column":"Revenue","datatype":"integer","columnDataType":"number(28,0)"},{"newName":"Customer Total Units Purchased","aggrtype":"sum","column":"Units","datatype":"numeric","columnDataType":"number(28,0)"}],"hashCount":8},{"stepId":"AddColumns_0","description":"Add Columns","type":"AddColumns","stepDisplayName":"","stepDescription":"","columns":[{"name":"Customer Income","expression":"CASE WHEN \"Customer Income Lvl\" = 'Level 1' THEN '< 25,000'\nWHEN \"Customer Income Lvl\" = 'LEVEL 2' THEN '>= 25,000 , < 30,000'\nWHEN \"Customer Income Lvl\" = 'LEVEL 3' THEN '>= 30,000 , < 35,000'\nWHEN \"Customer Income Lvl\" = 'LEVEL 4' THEN '>= 35,000 , < 40,000'\nWHEN \"Customer Income Lvl\" = 'LEVEL 5' THEN '>= 40,000 , < 45,000'\nWHEN \"Customer Income Lvl\" = 'LEVEL 6' THEN '>= 45,000 , < 50,000'\nWHEN \"Customer Income Lvl\" = 'LEVEL 7' THEN '>= 50,000 , < 55,000'\nWHEN \"Customer Income Lvl\" = 'LEVEL 8' THEN '>= 55,000 , < 60,000'\nWHEN \"Customer Income Lvl\" = 'LEVEL 9' THEN '>= 60,000 , < 65,000'\nELSE '>= 65,000' END","datatype":"varchar(4000)","aggrule":"none","srcexpression":"CASE WHEN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Income Lvl\" = 'Level 1' THEN '< 25,000'\nWHEN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Income Lvl\" = 'LEVEL 2' THEN '>= 25,000 , < 30,000'\nWHEN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Income Lvl\" = 'LEVEL 3' THEN '>= 30,000 , < 35,000'\nWHEN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Income Lvl\" = 'LEVEL 4' THEN '>= 35,000 , < 40,000'\nWHEN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Income Lvl\" = 'LEVEL 5' THEN '>= 40,000 , < 45,000'\nWHEN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Income Lvl\" = 'LEVEL 6' THEN '>= 45,000 , < 50,000'\nWHEN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Income Lvl\" = 'LEVEL 7' THEN '>= 50,000 , < 55,000'\nWHEN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Income Lvl\" = 'LEVEL 8' THEN '>= 55,000 , < 60,000'\nWHEN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Income Lvl\" = 'LEVEL 9' THEN '>= 60,000 , < 65,000'\nELSE '>= 65,000' END"},{"name":"Customer Age","expression":"TIMESTAMPDIFF(SQL_TSI_YEAR, \"Customer Birth Dt\", CURRENT_DATE)","datatype":"integer","aggrule":"sum","srcexpression":"TIMESTAMPDIFF(SQL_TSI_YEAR, XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Birth Dt\", CURRENT_DATE)"}]},{"stepId":"SelectColumns_0","description":"Select Columns","type":"SelectColumns","stepDisplayName":"Remove Geo","stepDescription":"","selectedColumns":["Calendar Date","Brand","Product","Type","Line of Business","Customer Name","Customer Key","Customer Income Lvl","Customer Gender","Customer Credit Rate","Customer Birth Dt","Customer Marital St","Revenue","Units","Product Total Revenue","Product Type Revenue","Customer Area","Customer City","Customer Country Name","Customer Estab Name","Customer Postal Code","Customer Region","Customer State Province","zip","Prev Year"]},{"stepId":"SelectColumns_1","description":"Select Columns","type":"SelectColumns","stepDisplayName":"","stepDescription":"","selectedColumns":["Calendar Date","Brand","Product","Type","Line of Business","Customer Name","Customer Key","Customer Income Lvl","Customer Gender","Customer Credit Rate","Customer Birth Dt","Customer Marital St","Revenue","Units","Product Total Revenue","Product Type Revenue","Customer Area","Customer City","Customer Country Name","Customer Estab Name","Customer Postal Code","Customer Region","Customer State Province","zip","Prev Year"]},{"stepId":"OutputDataset_4","description":"Save Data","type":"OutputDataset","stepDisplayName":"DSS Save","stepDescription":"","datasetRef":"ds_4","datasetName":"SampleSales-Enriched-Geo-DS","datasetDescription":"","outputType":"Create","parameters":[],"promptForOutputDataset":[],"customizedColumns":[{"colName":"Calendar Date","DBColName":"","aggrRule":"none","dataType":"timestamp"},{"colName":"Brand","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"Product","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"Type","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"Line of Business","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Name","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Key","DBColName":"","aggrRule":"none","dataType":"numeric"},{"colName":"Customer Income Lvl","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Gender","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Credit Rate","DBColName":"","aggrRule":"sum","dataType":"numeric"},{"colName":"Customer Birth Dt","DBColName":"","aggrRule":"none","dataType":"timestamp"},{"colName":"Customer Marital St","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"Revenue","DBColName":"","aggrRule":"sum","dataType":"numeric"},{"colName":"Units","DBColName":"","aggrRule":"sum","dataType":"numeric"},{"colName":"Product Total Revenue","DBColName":"","aggrRule":"sum","dataType":"numeric"},{"colName":"Product Type Revenue","DBColName":"","aggrRule":"sum","dataType":"numeric"},{"colName":"Customer Area","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"Customer City","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Country Name","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Estab Name","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Postal Code","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"Customer Region","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"Customer State Province","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"﻿geometry","DBColName":"","aggrRule":"none","dataType":"geometry"},{"colName":"zip","DBColName":"","aggrRule":"none","dataType":"varchar"},{"colName":"Prev Year","DBColName":"","aggrRule":"none","dataType":"integer"}],"saveType":"obi","connectionRef":"","tableName":"","connectionDisplayName":"adw-pm-gp-developer"},{"stepId":"InputDataset_2","description":"SanMateoGeo","type":"InputDataset","stepDisplayName":"SanMateoGeo","stepDescription":"","datasetId":"XSA('gabrielle.prichard@oracle.com'.'SanMateoGeo')","datasetRef":"ds_0","qualifiedTable":"XSA(ds_0)","datasetDescription":"","datasetType":"datamodel","datasetDisplayName":"SanMateoGeo","inputType":"all","parameters":[],"promptForInputSource":[],"columns":[{"name":"\"Zip_Codes_-_Areas_20240514\".\"the_geom\"","newName":"the_geom"},{"name":"\"Zip_Codes_-_Areas_20240514\".\"ZIP_CODE\"","newName":"ZIP_CODE"}]},{"stepId":"Concatenate_0","description":"Union Rows","type":"Concatenate","stepDisplayName":"","stepDescription":"","leftDataset":"InputDataset_1","rightDataset":"InputDataset_2","inputDatasetOrder":["InputDataset_1","InputDataset_2"],"concatenateType":"union all","matchingType":"byPosition"},{"stepId":"MergeColumn_0","description":"Merge Columns","type":"AddColumns","stepDisplayName":"","stepDescription":"","subType":"MergeColumn","columns":[{"name":"Merged","mergeColumns":[{"name":"Customer State Province","displayName":"Customer State Province"},{"name":"Customer Postal Code","displayName":"Customer Postal Code"}],"delimiter":" ","customDelimiter":"","datatype":"varchar(4000)","aggrule":"none","expression":"CONCAT(\"Customer State Province\"  , ' ' || \"Customer Postal Code\" )"}]},{"stepId":"SplitColumn_0","description":"Split Columns","type":"AddColumns","stepDisplayName":"","stepDescription":"","subType":"SplitColumn","columns":[{"name":"FName","exclude":false,"datatype":"varchar(4000)","aggrRule":"none","conformsToColumn":null,"conformsToType":null,"errorStatus":"","originalColumn":"Customer Name","separator":" ","occurence":1,"numOfParts":2,"customDelimiter":"","expr":"CASE WHEN POSITION(' ' IN \"Customer Name\") > 0 THEN  SUBSTRING(\"Customer Name\",0, POSITION(' ' IN \"Customer Name\")) ELSE \"Customer Name\" END","expression":"CASE WHEN POSITION(' ' IN \"Customer Name\") > 0 THEN  SUBSTRING(\"Customer Name\",0, POSITION(' ' IN \"Customer Name\")) ELSE \"Customer Name\" END","splitOn":"delimiter","position":2,"sourceExpressions":"CASE WHEN POSITION(' ' IN \"Customer Name\") > 0 THEN  SUBSTRING(\"Customer Name\",0, POSITION(' ' IN \"Customer Name\")) ELSE \"Customer Name\" END"},{"name":"LName","exclude":false,"datatype":"varchar(4000)","aggrRule":"none","conformsToColumn":null,"conformsToType":null,"errorStatus":"","originalColumn":"Customer Name","separator":" ","occurence":1,"numOfParts":2,"customDelimiter":"","expr":"CASE WHEN POSITION(' ' IN \"Customer Name\") > 0 THEN  SUBSTRING(\"Customer Name\", POSITION(' ' IN \"Customer Name\")+1, LENGTH(\"Customer Name\")) ELSE '' END","expression":"CASE WHEN POSITION(' ' IN \"Customer Name\") > 0 THEN  SUBSTRING(\"Customer Name\", POSITION(' ' IN \"Customer Name\")+1, LENGTH(\"Customer Name\")) ELSE '' END","splitOn":"delimiter","position":2}],"originalColumn":"Customer Name","separator":" ","occurence":1,"numOfParts":2,"customDelimiter":"","sourceExpressions":"CASE WHEN POSITION(' ' IN \"Customer Name\") > 0 THEN  SUBSTRING(\"Customer Name\",0, POSITION(' ' IN \"Customer Name\")) ELSE \"Customer Name\" END","position":2,"splitOn":"delimiter","names":[{"name":"FName","include":true},{"name":"LName","include":true}]},{"stepId":"TransformColumns_0","description":"Transform Column","type":"TransformColumns","stepDisplayName":"","stepDescription":"Modify customer names","columns":[{"name":"Customer Name","newName":"Customer Name","expression":"SUBSTRING(\"Customer Name\" FROM 1 FOR 1) || ' ' || SUBSTRING(\"Customer Name\" FROM POSITION(' ' IN \"Customer Name\") + 1)\n","datatype":"varchar(4000)","aggrule":"none","srcexpression":"SUBSTRING(XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Name\" FROM 1 FOR 1) || ' ' || SUBSTRING(XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Name\" FROM POSITION(' ' IN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Name\") + 1)\n"}]}],"links":[{"id":"linkInputDataset_0RenameColumns_0","startNode":"InputDataset_0","endNode":"RenameColumns_0"},{"id":"linkRenameColumns_0Join_0","startNode":"RenameColumns_0","endNode":"Join_0"},{"id":"linkJoin_0AddColumns_1","startNode":"Join_0","endNode":"AddColumns_1"},{"id":"linkAddColumns_1Filter_0","startNode":"AddColumns_1","endNode":"Filter_0"},{"id":"linkFilter_0Branch_0","startNode":"Filter_0","endNode":"Branch_0"},{"id":"linkBranch_0SelectColumns_0","startNode":"Branch_0","endNode":"SelectColumns_0"},{"id":"linkSelectColumns_0MergeColumn_0","startNode":"SelectColumns_0","endNode":"MergeColumn_0"},{"id":"linkMergeColumn_0SplitColumn_0","startNode":"MergeColumn_0","endNode":"SplitColumn_0"},{"id":"linkSplitColumn_0TransformColumns_0","startNode":"SplitColumn_0","endNode":"TransformColumns_0"},{"id":"linkTransformColumns_0OutputDataset_0","startNode":"TransformColumns_0","endNode":"OutputDataset_0"},{"id":"linkBranch_0OutputDataset_4","startNode":"Branch_0","endNode":"OutputDataset_4"},{"id":"linkBranch_0SelectColumns_1","startNode":"Branch_0","endNode":"SelectColumns_1"},{"id":"linkSelectColumns_1GroupBy_0","startNode":"SelectColumns_1","endNode":"GroupBy_0"},{"id":"linkGroupBy_0AddColumns_0","startNode":"GroupBy_0","endNode":"AddColumns_0"},{"id":"linkAddColumns_0OutputDataset_1","startNode":"AddColumns_0","endNode":"OutputDataset_1"},{"id":"linkInputDataset_1Concatenate_0","startNode":"InputDataset_1","endNode":"Concatenate_0"},{"id":"linkConcatenate_0Join_0","startNode":"Concatenate_0","endNode":"Join_0"},{"id":"linkInputDataset_2Concatenate_0","startNode":"InputDataset_2","endNode":"Concatenate_0"}],"description":"","version_no":"2.6","DSSDependencies":{"inputDatasets":[{"datasetRef":"ds_1","datasetId":"'gabrielle.prichard@oracle.com'.'SFO-Geo'"},{"datasetRef":"ds_5","datasetId":"'gabrielle.prichard@oracle.com'.'Sample Sales'"},{"datasetRef":"ds_0","datasetId":"'gabrielle.prichard@oracle.com'.'SanMateoGeo'"}],"outputDatasets":[{"datasetRef":"ds_2","datasetId":"'gabrielle.prichard@oracle.com'.'SampleSales-Enriched-NoGeo-DS'"},{"datasetRef":"ds_6","datasetId":"'gabrielle.prichard@oracle.com'.'SampleSales-Customers'"},{"datasetRef":"ds_4","datasetId":"'gabrielle.prichard@oracle.com'.'SampleSales-Enriched-Geo-DS'"}],"connectionInfo":[{"connectionRef":"co_0","connectionId":"'gabrielle.prichard@oracle.com'.'adw-pm-gp-developer'","connectionProvider":"dwcs"},{"connectionRef":"co_1","connectionId":"'gabrielle.prichard@oracle.com'.'adw-pm-gp-developer'","connectionProvider":"dwcs"}],"inputScripts":[]}},"datagen-type":"DATAFLOW","display-name":"Data Flow 1: Enrich Subject Area WB Copy","owner":"gabrielle.prichard@oracle.com","dataflow-name":"Data Flow 1: Enrich Subject Area WB Copy"}}
+{
+    "requiredFeatureNames": [],
+    "dfm": {
+        "dataReplicator": false,
+        "crconnectionDependencies": [],
+        "datagen-name": "Data Flow 1: Enrich Subject Area WB Copy",
+        "namespace": "gabrielle.prichard@oracle.com",
+        "definition": {
+            "steps": [
+                {
+                    "stepId": "InputDataset_0",
+                    "description": "Sample Sales RBF",
+                    "type": "InputDataset",
+                    "stepDisplayName": "Sample Sales RBF",
+                    "stepDescription": "",
+                    "datasetId": "XSA('gabrielle.prichard@oracle.com'.'Sample Sales')",
+                    "datasetRef": "ds_5",
+                    "qualifiedTable": "XSA(ds_5)",
+                    "datasetDescription": "",
+                    "datasetType": "datamodel",
+                    "datasetDisplayName": "Sample Sales RBF",
+                    "inputType": "all",
+                    "parameters": [],
+                    "promptForInputSource": [],
+                    "columns": [
+                        {
+                            "name": "\"Sample Sales\".\"Calendar Date\"",
+                            "newName": "Calendar Date"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Brand\"",
+                            "newName": "Brand"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Product\"",
+                            "newName": "Product"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Type\"",
+                            "newName": "Type"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Line of Business\"",
+                            "newName": "Line of Business"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Name\"",
+                            "newName": "Name"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Cust Key\"",
+                            "newName": "Cust Key"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Income Lvl\"",
+                            "newName": "Income Lvl"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Gender\"",
+                            "newName": "Gender"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Crdt Rate\"",
+                            "newName": "Crdt Rate"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Birth Dt\"",
+                            "newName": "Birth Dt"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Marital St\"",
+                            "newName": "Marital St"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Revenue\"",
+                            "newName": "Revenue"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Units\"",
+                            "newName": "Units"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Product Total Revenue\"",
+                            "newName": "Product Total Revenue"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Product Type Revenue\"",
+                            "newName": "Product Type Revenue"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Area\"",
+                            "newName": "Area"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"City\"",
+                            "newName": "City"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Country Name\"",
+                            "newName": "Country Name"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Estab Name\"",
+                            "newName": "Estab Name"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Postal Code\"",
+                            "newName": "Postal Code"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"Region\"",
+                            "newName": "Region"
+                        },
+                        {
+                            "name": "\"Sample Sales\".\"State Province\"",
+                            "newName": "State Province"
+                        }
+                    ]
+                },
+                {
+                    "stepId": "InputDataset_1",
+                    "description": "SFO-Geo",
+                    "type": "InputDataset",
+                    "stepDisplayName": "SFO-Geo",
+                    "stepDescription": "",
+                    "datasetId": "XSA('gabrielle.prichard@oracle.com'.'SFO-Geo')",
+                    "datasetRef": "ds_1",
+                    "qualifiedTable": "XSA(ds_1)",
+                    "datasetDescription": "",
+                    "datasetType": "datamodel",
+                    "datasetDisplayName": "SFO-Geo",
+                    "inputType": "all",
+                    "parameters": [],
+                    "promptForInputSource": [],
+                    "columns": [
+                        {
+                            "name": "\"San_Francisco_ZIP_Codes_20240508\".\"﻿geometry\"",
+                            "newName": "﻿geometry"
+                        },
+                        {
+                            "name": "\"San_Francisco_ZIP_Codes_20240508\".\"zip\"",
+                            "newName": "zip"
+                        }
+                    ]
+                },
+                {
+                    "stepId": "Join_0",
+                    "description": "Join",
+                    "type": "Join",
+                    "stepDisplayName": "",
+                    "stepDescription": "",
+                    "joinType": "leftouterjoin",
+                    "leftDataset": "RenameColumns_0",
+                    "rightDataset": "Concatenate_0",
+                    "joinOn": [
+                        {
+                            "id": "JoinOn_0",
+                            "leftColumn": "Customer Postal Code",
+                            "rightColumn": "zip",
+                            "operator": "="
+                        }
+                    ],
+                    "joinCondition": "and"
+                },
+                {
+                    "stepId": "OutputDataset_0",
+                    "description": "Save Data",
+                    "type": "OutputDataset",
+                    "stepDisplayName": "DB Save",
+                    "stepDescription": "",
+                    "datasetRef": "ds_2",
+                    "datasetName": "SampleSales-Enriched-NoGeo-DS",
+                    "datasetDescription": "",
+                    "outputType": "Create",
+                    "parameters": [],
+                    "promptForOutputDataset": [],
+                    "customizedColumns": [
+                        {
+                            "colName": "Calendar Date",
+                            "DBColName": "CALENDAR_DATE",
+                            "aggrRule": "none",
+                            "dataType": "timestamp"
+                        },
+                        {
+                            "colName": "Brand",
+                            "DBColName": "BRAND",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Product",
+                            "DBColName": "PRODUCT",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Type",
+                            "DBColName": "TYPE",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Line of Business",
+                            "DBColName": "LINE_OF_BUSINESS",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Name",
+                            "DBColName": "CUSTOMER_NAME",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Key",
+                            "DBColName": "CUSTOMER_KEY",
+                            "aggrRule": "none",
+                            "dataType": "numeric"
+                        },
+                        {
+                            "colName": "Customer Income Lvl",
+                            "DBColName": "CUSTOMER_INCOME_LVL",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Gender",
+                            "DBColName": "CUSTOMER_GENDER",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Credit Rate",
+                            "DBColName": "CUSTOMER_CREDIT_RATE",
+                            "aggrRule": "sum",
+                            "dataType": "numeric"
+                        },
+                        {
+                            "colName": "Customer Birth Dt",
+                            "DBColName": "CUSTOMER_BIRTH_DT",
+                            "aggrRule": "none",
+                            "dataType": "timestamp"
+                        },
+                        {
+                            "colName": "Customer Marital St",
+                            "DBColName": "CUSTOMER_MARITAL_ST",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Revenue",
+                            "DBColName": "REVENUE",
+                            "aggrRule": "sum",
+                            "dataType": "numeric"
+                        },
+                        {
+                            "colName": "Units",
+                            "DBColName": "UNITS",
+                            "aggrRule": "sum",
+                            "dataType": "numeric"
+                        },
+                        {
+                            "colName": "Product Total Revenue",
+                            "DBColName": "PRODUCT_TOTAL_REVENUE",
+                            "aggrRule": "sum",
+                            "dataType": "numeric"
+                        },
+                        {
+                            "colName": "Product Type Revenue",
+                            "DBColName": "PRODUCT_TYPE_REVENUE",
+                            "aggrRule": "sum",
+                            "dataType": "numeric"
+                        },
+                        {
+                            "colName": "Customer Area",
+                            "DBColName": "CUSTOMER_AREA",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer City",
+                            "DBColName": "CUSTOMER_CITY",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Country Name",
+                            "DBColName": "CUSTOMER_COUNTRY_NAME",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Estab Name",
+                            "DBColName": "CUSTOMER_ESTAB_NAME",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Postal Code",
+                            "DBColName": "CUSTOMER_POSTAL_CODE",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Region",
+                            "DBColName": "CUSTOMER_REGION",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer State Province",
+                            "DBColName": "CUSTOMER_STATE_PROVINCE",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "zip",
+                            "DBColName": "ZIP",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Prev Year",
+                            "DBColName": "PREV_YEAR",
+                            "aggrRule": "none",
+                            "dataType": "integer"
+                        },
+                        {
+                            "colName": "Merged",
+                            "DBColName": "MERGED",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "FName",
+                            "DBColName": "FNAME",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "LName",
+                            "DBColName": "LNAME",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        }
+                    ],
+                    "saveType": "conn",
+                    "connectionRef": "co_1",
+                    "tableName": "SampleSales_Enriched_WB_NoGeo",
+                    "connectionDisplayName": "adw-pm-gp-developer"
+                },
+                {
+                    "stepId": "AddColumns_1",
+                    "description": "Add Columns",
+                    "type": "AddColumns",
+                    "stepDisplayName": "Variable",
+                    "stepDescription": "",
+                    "columns": [
+                        {
+                            "name": "Prev Year",
+                            "expression": "year(TIMESTAMPADD(SQL_TSI_YEAR, -3, CURRENT_DATE))",
+                            "datatype": "integer",
+                            "aggrule": "sum",
+                            "srcexpression": "year(TIMESTAMPADD(SQL_TSI_YEAR, -3, CURRENT_DATE))"
+                        }
+                    ]
+                },
+                {
+                    "stepId": "Filter_0",
+                    "description": "Filter",
+                    "type": "Filter",
+                    "stepDisplayName": "Prev Year",
+                    "stepDescription": "",
+                    "filter": [
+                        {
+                            "expression": "year(\"Calendar Date\") = \"Prev Year\"",
+                            "srcexpression": "year(\"Calendar Date\") = \"Prev Year\"",
+                            "type": "complexFilter"
+                        }
+                    ],
+                    "filterControlCollections": {
+                        "name": "report",
+                        "filterControls": {
+                            "children": [
+                                {
+                                    "filterID": "c930adfb-77ef-4ff3-8e68-29d40355093e",
+                                    "type": "saw:expressionFilterControl",
+                                    "label": {
+                                        "caption": {
+                                            "text": "Expression Filter"
+                                        }
+                                    },
+                                    "expr": {
+                                        "children": [],
+                                        "type": "sawx:sql",
+                                        "expression": "year(\"TableAlias\".\"Calendar Date\") = \"TableAlias\".\"Prev Year\""
+                                    },
+                                    "filterControlConfig": {
+                                        "_version": "1.0.8",
+                                        "settings": {
+                                            "filterModelClassName": "obitech-expressionfilter/expressionfiltertwopartformula.ExpressionFilterModelTwoPartFormula",
+                                            "location": "filter_bar"
+                                        }
+                                    },
+                                    "address": 2,
+                                    "isTwoPartFormula": true
+                                }
+                            ]
+                        }
+                    },
+                    "shouldUpgradeVersion": false
+                },
+                {
+                    "stepId": "RenameColumns_0",
+                    "description": "Rename Columns",
+                    "type": "RenameColumns",
+                    "stepDisplayName": "",
+                    "stepDescription": "",
+                    "renamedColumns": [
+                        {
+                            "oldName": "Name",
+                            "newName": "Customer Name"
+                        },
+                        {
+                            "oldName": "Cust Key",
+                            "newName": "Customer Key"
+                        },
+                        {
+                            "oldName": "Area",
+                            "newName": "Customer Area"
+                        },
+                        {
+                            "oldName": "City",
+                            "newName": "Customer City"
+                        },
+                        {
+                            "oldName": "Country Name",
+                            "newName": "Customer Country Name"
+                        },
+                        {
+                            "oldName": "Estab Name",
+                            "newName": "Customer Estab Name"
+                        },
+                        {
+                            "oldName": "Income Lvl",
+                            "newName": "Customer Income Lvl"
+                        },
+                        {
+                            "oldName": "Gender",
+                            "newName": "Customer Gender"
+                        },
+                        {
+                            "oldName": "Birth Dt",
+                            "newName": "Customer Birth Dt"
+                        },
+                        {
+                            "oldName": "Marital St",
+                            "newName": "Customer Marital St"
+                        },
+                        {
+                            "oldName": "Postal Code",
+                            "newName": "Customer Postal Code"
+                        },
+                        {
+                            "oldName": "Region",
+                            "newName": "Customer Region"
+                        },
+                        {
+                            "oldName": "State Province",
+                            "newName": "Customer State Province"
+                        },
+                        {
+                            "oldName": "Crdt Rate",
+                            "newName": "Customer Credit Rate"
+                        }
+                    ]
+                },
+                {
+                    "stepId": "Branch_0",
+                    "description": "Branch",
+                    "type": "Branch",
+                    "stepDisplayName": "",
+                    "stepDescription": ""
+                },
+                {
+                    "stepId": "OutputDataset_1",
+                    "description": "Save Data",
+                    "type": "OutputDataset",
+                    "stepDisplayName": "",
+                    "stepDescription": "",
+                    "datasetRef": "ds_6",
+                    "datasetName": "SampleSales-Customers",
+                    "datasetDescription": "",
+                    "outputType": "Create",
+                    "parameters": [],
+                    "promptForOutputDataset": [],
+                    "customizedColumns": [
+                        {
+                            "colName": "Customer Name",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Key",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "numeric"
+                        },
+                        {
+                            "colName": "Customer Birth Dt",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "timestamp"
+                        },
+                        {
+                            "colName": "Customer Income Lvl",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Credit Rate",
+                            "DBColName": "",
+                            "aggrRule": "sum",
+                            "dataType": "numeric"
+                        },
+                        {
+                            "colName": "Customer Total Revenue",
+                            "DBColName": "",
+                            "aggrRule": "sum",
+                            "dataType": "integer"
+                        },
+                        {
+                            "colName": "Customer Total Units Purchased",
+                            "DBColName": "",
+                            "aggrRule": "sum",
+                            "dataType": "numeric"
+                        },
+                        {
+                            "colName": "Customer Income",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Age",
+                            "DBColName": "",
+                            "aggrRule": "sum",
+                            "dataType": "integer"
+                        }
+                    ],
+                    "saveType": "obi",
+                    "connectionRef": "",
+                    "tableName": "",
+                    "connectionDisplayName": ""
+                },
+                {
+                    "stepId": "GroupBy_0",
+                    "description": "Aggregate",
+                    "type": "GroupBy",
+                    "stepDisplayName": "",
+                    "stepDescription": "",
+                    "groupByColumns": [
+                        "Customer Name",
+                        "Customer Key",
+                        "Customer Birth Dt",
+                        "Customer Income Lvl",
+                        "Customer Credit Rate"
+                    ],
+                    "aggrColumns": [
+                        {
+                            "newName": "Customer Total Revenue",
+                            "aggrtype": "sum",
+                            "column": "Revenue",
+                            "datatype": "integer",
+                            "columnDataType": "number(28,0)"
+                        },
+                        {
+                            "newName": "Customer Total Units Purchased",
+                            "aggrtype": "sum",
+                            "column": "Units",
+                            "datatype": "numeric",
+                            "columnDataType": "number(28,0)"
+                        }
+                    ],
+                    "hashCount": 8
+                },
+                {
+                    "stepId": "AddColumns_0",
+                    "description": "Add Columns",
+                    "type": "AddColumns",
+                    "stepDisplayName": "",
+                    "stepDescription": "",
+                    "columns": [
+                        {
+                            "name": "Customer Income",
+                            "expression": "CASE WHEN \"Customer Income Lvl\" = 'Level 1' THEN '< 25,000'\nWHEN \"Customer Income Lvl\" = 'LEVEL 2' THEN '>= 25,000 , < 30,000'\nWHEN \"Customer Income Lvl\" = 'LEVEL 3' THEN '>= 30,000 , < 35,000'\nWHEN \"Customer Income Lvl\" = 'LEVEL 4' THEN '>= 35,000 , < 40,000'\nWHEN \"Customer Income Lvl\" = 'LEVEL 5' THEN '>= 40,000 , < 45,000'\nWHEN \"Customer Income Lvl\" = 'LEVEL 6' THEN '>= 45,000 , < 50,000'\nWHEN \"Customer Income Lvl\" = 'LEVEL 7' THEN '>= 50,000 , < 55,000'\nWHEN \"Customer Income Lvl\" = 'LEVEL 8' THEN '>= 55,000 , < 60,000'\nWHEN \"Customer Income Lvl\" = 'LEVEL 9' THEN '>= 60,000 , < 65,000'\nELSE '>= 65,000' END",
+                            "datatype": "varchar(4000)",
+                            "aggrule": "none",
+                            "srcexpression": "CASE WHEN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Income Lvl\" = 'Level 1' THEN '< 25,000'\nWHEN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Income Lvl\" = 'LEVEL 2' THEN '>= 25,000 , < 30,000'\nWHEN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Income Lvl\" = 'LEVEL 3' THEN '>= 30,000 , < 35,000'\nWHEN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Income Lvl\" = 'LEVEL 4' THEN '>= 35,000 , < 40,000'\nWHEN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Income Lvl\" = 'LEVEL 5' THEN '>= 40,000 , < 45,000'\nWHEN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Income Lvl\" = 'LEVEL 6' THEN '>= 45,000 , < 50,000'\nWHEN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Income Lvl\" = 'LEVEL 7' THEN '>= 50,000 , < 55,000'\nWHEN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Income Lvl\" = 'LEVEL 8' THEN '>= 55,000 , < 60,000'\nWHEN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Income Lvl\" = 'LEVEL 9' THEN '>= 60,000 , < 65,000'\nELSE '>= 65,000' END"
+                        },
+                        {
+                            "name": "Customer Age",
+                            "expression": "TIMESTAMPDIFF(SQL_TSI_YEAR, \"Customer Birth Dt\", CURRENT_DATE)",
+                            "datatype": "integer",
+                            "aggrule": "sum",
+                            "srcexpression": "TIMESTAMPDIFF(SQL_TSI_YEAR, XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Birth Dt\", CURRENT_DATE)"
+                        }
+                    ]
+                },
+                {
+                    "stepId": "SelectColumns_0",
+                    "description": "Select Columns",
+                    "type": "SelectColumns",
+                    "stepDisplayName": "Remove Geo",
+                    "stepDescription": "",
+                    "selectedColumns": [
+                        "Calendar Date",
+                        "Brand",
+                        "Product",
+                        "Type",
+                        "Line of Business",
+                        "Customer Name",
+                        "Customer Key",
+                        "Customer Income Lvl",
+                        "Customer Gender",
+                        "Customer Credit Rate",
+                        "Customer Birth Dt",
+                        "Customer Marital St",
+                        "Revenue",
+                        "Units",
+                        "Product Total Revenue",
+                        "Product Type Revenue",
+                        "Customer Area",
+                        "Customer City",
+                        "Customer Country Name",
+                        "Customer Estab Name",
+                        "Customer Postal Code",
+                        "Customer Region",
+                        "Customer State Province",
+                        "zip",
+                        "Prev Year"
+                    ]
+                },
+                {
+                    "stepId": "SelectColumns_1",
+                    "description": "Select Columns",
+                    "type": "SelectColumns",
+                    "stepDisplayName": "",
+                    "stepDescription": "",
+                    "selectedColumns": [
+                        "Calendar Date",
+                        "Brand",
+                        "Product",
+                        "Type",
+                        "Line of Business",
+                        "Customer Name",
+                        "Customer Key",
+                        "Customer Income Lvl",
+                        "Customer Gender",
+                        "Customer Credit Rate",
+                        "Customer Birth Dt",
+                        "Customer Marital St",
+                        "Revenue",
+                        "Units",
+                        "Product Total Revenue",
+                        "Product Type Revenue",
+                        "Customer Area",
+                        "Customer City",
+                        "Customer Country Name",
+                        "Customer Estab Name",
+                        "Customer Postal Code",
+                        "Customer Region",
+                        "Customer State Province",
+                        "zip",
+                        "Prev Year"
+                    ]
+                },
+                {
+                    "stepId": "OutputDataset_4",
+                    "description": "Save Data",
+                    "type": "OutputDataset",
+                    "stepDisplayName": "DSS Save",
+                    "stepDescription": "",
+                    "datasetRef": "ds_4",
+                    "datasetName": "SampleSales-Enriched-Geo-DS",
+                    "datasetDescription": "",
+                    "outputType": "Create",
+                    "parameters": [],
+                    "promptForOutputDataset": [],
+                    "customizedColumns": [
+                        {
+                            "colName": "Calendar Date",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "timestamp"
+                        },
+                        {
+                            "colName": "Brand",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Product",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Type",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Line of Business",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Name",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Key",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "numeric"
+                        },
+                        {
+                            "colName": "Customer Income Lvl",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Gender",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Credit Rate",
+                            "DBColName": "",
+                            "aggrRule": "sum",
+                            "dataType": "numeric"
+                        },
+                        {
+                            "colName": "Customer Birth Dt",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "timestamp"
+                        },
+                        {
+                            "colName": "Customer Marital St",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Revenue",
+                            "DBColName": "",
+                            "aggrRule": "sum",
+                            "dataType": "numeric"
+                        },
+                        {
+                            "colName": "Units",
+                            "DBColName": "",
+                            "aggrRule": "sum",
+                            "dataType": "numeric"
+                        },
+                        {
+                            "colName": "Product Total Revenue",
+                            "DBColName": "",
+                            "aggrRule": "sum",
+                            "dataType": "numeric"
+                        },
+                        {
+                            "colName": "Product Type Revenue",
+                            "DBColName": "",
+                            "aggrRule": "sum",
+                            "dataType": "numeric"
+                        },
+                        {
+                            "colName": "Customer Area",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer City",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Country Name",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Estab Name",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Postal Code",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer Region",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Customer State Province",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "﻿geometry",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "geometry"
+                        },
+                        {
+                            "colName": "zip",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "varchar"
+                        },
+                        {
+                            "colName": "Prev Year",
+                            "DBColName": "",
+                            "aggrRule": "none",
+                            "dataType": "integer"
+                        }
+                    ],
+                    "saveType": "obi",
+                    "connectionRef": "",
+                    "tableName": "",
+                    "connectionDisplayName": "adw-pm-gp-developer"
+                },
+                {
+                    "stepId": "InputDataset_2",
+                    "description": "SanMateoGeo",
+                    "type": "InputDataset",
+                    "stepDisplayName": "SanMateoGeo",
+                    "stepDescription": "",
+                    "datasetId": "XSA('gabrielle.prichard@oracle.com'.'SanMateoGeo')",
+                    "datasetRef": "ds_0",
+                    "qualifiedTable": "XSA(ds_0)",
+                    "datasetDescription": "",
+                    "datasetType": "datamodel",
+                    "datasetDisplayName": "SanMateoGeo",
+                    "inputType": "all",
+                    "parameters": [],
+                    "promptForInputSource": [],
+                    "columns": [
+                        {
+                            "name": "\"Zip_Codes_-_Areas_20240514\".\"the_geom\"",
+                            "newName": "the_geom"
+                        },
+                        {
+                            "name": "\"Zip_Codes_-_Areas_20240514\".\"ZIP_CODE\"",
+                            "newName": "ZIP_CODE"
+                        }
+                    ]
+                },
+                {
+                    "stepId": "Concatenate_0",
+                    "description": "Union Rows",
+                    "type": "Concatenate",
+                    "stepDisplayName": "",
+                    "stepDescription": "",
+                    "leftDataset": "InputDataset_1",
+                    "rightDataset": "InputDataset_2",
+                    "inputDatasetOrder": [
+                        "InputDataset_1",
+                        "InputDataset_2"
+                    ],
+                    "concatenateType": "union all",
+                    "matchingType": "byPosition"
+                },
+                {
+                    "stepId": "MergeColumn_0",
+                    "description": "Merge Columns",
+                    "type": "AddColumns",
+                    "stepDisplayName": "",
+                    "stepDescription": "",
+                    "subType": "MergeColumn",
+                    "columns": [
+                        {
+                            "name": "Merged",
+                            "mergeColumns": [
+                                {
+                                    "name": "Customer State Province",
+                                    "displayName": "Customer State Province"
+                                },
+                                {
+                                    "name": "Customer Postal Code",
+                                    "displayName": "Customer Postal Code"
+                                }
+                            ],
+                            "delimiter": " ",
+                            "customDelimiter": "",
+                            "datatype": "varchar(4000)",
+                            "aggrule": "none",
+                            "expression": "CONCAT(\"Customer State Province\"  , ' ' || \"Customer Postal Code\" )"
+                        }
+                    ]
+                },
+                {
+                    "stepId": "SplitColumn_0",
+                    "description": "Split Columns",
+                    "type": "AddColumns",
+                    "stepDisplayName": "",
+                    "stepDescription": "",
+                    "subType": "SplitColumn",
+                    "columns": [
+                        {
+                            "name": "FName",
+                            "exclude": false,
+                            "datatype": "varchar(4000)",
+                            "aggrRule": "none",
+                            "conformsToColumn": null,
+                            "conformsToType": null,
+                            "errorStatus": "",
+                            "originalColumn": "Customer Name",
+                            "separator": " ",
+                            "occurence": 1,
+                            "numOfParts": 2,
+                            "customDelimiter": "",
+                            "expr": "CASE WHEN POSITION(' ' IN \"Customer Name\") > 0 THEN  SUBSTRING(\"Customer Name\",0, POSITION(' ' IN \"Customer Name\")) ELSE \"Customer Name\" END",
+                            "expression": "CASE WHEN POSITION(' ' IN \"Customer Name\") > 0 THEN  SUBSTRING(\"Customer Name\",0, POSITION(' ' IN \"Customer Name\")) ELSE \"Customer Name\" END",
+                            "splitOn": "delimiter",
+                            "position": 2,
+                            "sourceExpressions": "CASE WHEN POSITION(' ' IN \"Customer Name\") > 0 THEN  SUBSTRING(\"Customer Name\",0, POSITION(' ' IN \"Customer Name\")) ELSE \"Customer Name\" END"
+                        },
+                        {
+                            "name": "LName",
+                            "exclude": false,
+                            "datatype": "varchar(4000)",
+                            "aggrRule": "none",
+                            "conformsToColumn": null,
+                            "conformsToType": null,
+                            "errorStatus": "",
+                            "originalColumn": "Customer Name",
+                            "separator": " ",
+                            "occurence": 1,
+                            "numOfParts": 2,
+                            "customDelimiter": "",
+                            "expr": "CASE WHEN POSITION(' ' IN \"Customer Name\") > 0 THEN  SUBSTRING(\"Customer Name\", POSITION(' ' IN \"Customer Name\")+1, LENGTH(\"Customer Name\")) ELSE '' END",
+                            "expression": "CASE WHEN POSITION(' ' IN \"Customer Name\") > 0 THEN  SUBSTRING(\"Customer Name\", POSITION(' ' IN \"Customer Name\")+1, LENGTH(\"Customer Name\")) ELSE '' END",
+                            "splitOn": "delimiter",
+                            "position": 2
+                        }
+                    ],
+                    "originalColumn": "Customer Name",
+                    "separator": " ",
+                    "occurence": 1,
+                    "numOfParts": 2,
+                    "customDelimiter": "",
+                    "sourceExpressions": "CASE WHEN POSITION(' ' IN \"Customer Name\") > 0 THEN  SUBSTRING(\"Customer Name\",0, POSITION(' ' IN \"Customer Name\")) ELSE \"Customer Name\" END",
+                    "position": 2,
+                    "splitOn": "delimiter",
+                    "names": [
+                        {
+                            "name": "FName",
+                            "include": true
+                        },
+                        {
+                            "name": "LName",
+                            "include": true
+                        }
+                    ]
+                },
+                {
+                    "stepId": "TransformColumns_0",
+                    "description": "Transform Column",
+                    "type": "TransformColumns",
+                    "stepDisplayName": "",
+                    "stepDescription": "Modify customer names",
+                    "columns": [
+                        {
+                            "name": "Customer Name",
+                            "newName": "Customer Name",
+                            "expression": "SUBSTRING(\"Customer Name\" FROM 1 FOR 1) || ' ' || SUBSTRING(\"Customer Name\" FROM POSITION(' ' IN \"Customer Name\") + 1)\n",
+                            "datatype": "varchar(4000)",
+                            "aggrule": "none",
+                            "srcexpression": "SUBSTRING(XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Name\" FROM 1 FOR 1) || ' ' || SUBSTRING(XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Name\" FROM POSITION(' ' IN XSA('gabrielle.prichard@oracle.com'.'__CLIENT_FLOW_DATASET__').\"Columns\".\"Customer Name\") + 1)\n"
+                        }
+                    ]
+                }
+            ],
+            "links": [
+                {
+                    "id": "linkInputDataset_0RenameColumns_0",
+                    "startNode": "InputDataset_0",
+                    "endNode": "RenameColumns_0"
+                },
+                {
+                    "id": "linkRenameColumns_0Join_0",
+                    "startNode": "RenameColumns_0",
+                    "endNode": "Join_0"
+                },
+                {
+                    "id": "linkJoin_0AddColumns_1",
+                    "startNode": "Join_0",
+                    "endNode": "AddColumns_1"
+                },
+                {
+                    "id": "linkAddColumns_1Filter_0",
+                    "startNode": "AddColumns_1",
+                    "endNode": "Filter_0"
+                },
+                {
+                    "id": "linkFilter_0Branch_0",
+                    "startNode": "Filter_0",
+                    "endNode": "Branch_0"
+                },
+                {
+                    "id": "linkBranch_0SelectColumns_0",
+                    "startNode": "Branch_0",
+                    "endNode": "SelectColumns_0"
+                },
+                {
+                    "id": "linkSelectColumns_0MergeColumn_0",
+                    "startNode": "SelectColumns_0",
+                    "endNode": "MergeColumn_0"
+                },
+                {
+                    "id": "linkMergeColumn_0SplitColumn_0",
+                    "startNode": "MergeColumn_0",
+                    "endNode": "SplitColumn_0"
+                },
+                {
+                    "id": "linkSplitColumn_0TransformColumns_0",
+                    "startNode": "SplitColumn_0",
+                    "endNode": "TransformColumns_0"
+                },
+                {
+                    "id": "linkTransformColumns_0OutputDataset_0",
+                    "startNode": "TransformColumns_0",
+                    "endNode": "OutputDataset_0"
+                },
+                {
+                    "id": "linkBranch_0OutputDataset_4",
+                    "startNode": "Branch_0",
+                    "endNode": "OutputDataset_4"
+                },
+                {
+                    "id": "linkBranch_0SelectColumns_1",
+                    "startNode": "Branch_0",
+                    "endNode": "SelectColumns_1"
+                },
+                {
+                    "id": "linkSelectColumns_1GroupBy_0",
+                    "startNode": "SelectColumns_1",
+                    "endNode": "GroupBy_0"
+                },
+                {
+                    "id": "linkGroupBy_0AddColumns_0",
+                    "startNode": "GroupBy_0",
+                    "endNode": "AddColumns_0"
+                },
+                {
+                    "id": "linkAddColumns_0OutputDataset_1",
+                    "startNode": "AddColumns_0",
+                    "endNode": "OutputDataset_1"
+                },
+                {
+                    "id": "linkInputDataset_1Concatenate_0",
+                    "startNode": "InputDataset_1",
+                    "endNode": "Concatenate_0"
+                },
+                {
+                    "id": "linkConcatenate_0Join_0",
+                    "startNode": "Concatenate_0",
+                    "endNode": "Join_0"
+                },
+                {
+                    "id": "linkInputDataset_2Concatenate_0",
+                    "startNode": "InputDataset_2",
+                    "endNode": "Concatenate_0"
+                }
+            ],
+            "description": "",
+            "version_no": "2.6",
+            "DSSDependencies": {
+                "inputDatasets": [
+                    {
+                        "datasetRef": "ds_1",
+                        "datasetId": "'gabrielle.prichard@oracle.com'.'SFO-Geo'"
+                    },
+                    {
+                        "datasetRef": "ds_5",
+                        "datasetId": "'gabrielle.prichard@oracle.com'.'Sample Sales'"
+                    },
+                    {
+                        "datasetRef": "ds_0",
+                        "datasetId": "'gabrielle.prichard@oracle.com'.'SanMateoGeo'"
+                    }
+                ],
+                "outputDatasets": [
+                    {
+                        "datasetRef": "ds_2",
+                        "datasetId": "'gabrielle.prichard@oracle.com'.'SampleSales-Enriched-NoGeo-DS'"
+                    },
+                    {
+                        "datasetRef": "ds_6",
+                        "datasetId": "'gabrielle.prichard@oracle.com'.'SampleSales-Customers'"
+                    },
+                    {
+                        "datasetRef": "ds_4",
+                        "datasetId": "'gabrielle.prichard@oracle.com'.'SampleSales-Enriched-Geo-DS'"
+                    }
+                ],
+                "connectionInfo": [
+                    {
+                        "connectionRef": "co_0",
+                        "connectionId": "'gabrielle.prichard@oracle.com'.'adw-pm-gp-developer'",
+                        "connectionProvider": "dwcs"
+                    },
+                    {
+                        "connectionRef": "co_1",
+                        "connectionId": "'gabrielle.prichard@oracle.com'.'adw-pm-gp-developer'",
+                        "connectionProvider": "dwcs"
+                    }
+                ],
+                "inputScripts": []
+            }
+        },
+        "datagen-type": "DATAFLOW",
+        "display-name": "Data Flow 1: Enrich Subject Area WB Copy",
+        "owner": "gabrielle.prichard@oracle.com",
+        "dataflow-name": "Data Flow 1: Enrich Subject Area WB Copy"
+    }
+}
